@@ -1,0 +1,288 @@
+<extend name="Base/common"/><block name="body">
+<!--container begin-->
+<div class="flexcontainer">
+<!--menu begin--><div class="nav-wrap">
+ <!--fenlei begin--> <div class="nava">
+    <div class="goods">
+      <div>
+        <h2> <a>商品分类</a> </h2>
+      </div>
+       <div class="all-goods"  id="all-goods">
+<volist name="categoryq" id="cate">
+<div class="item">
+          <div class="product"><h4><a href="{:U('home/article/index/category/'.$cate['name'])}">{$cate.title}</a> </h4><s></s> </div>
+            <if condition="$cate['child'] neq false">
+              <div class="product-wrap pos"> 
+            <!--子分类-->
+            <div class="cf">
+              <div class="fl wd252 pr20">
+              
+                <volist name="cate['child']" id="cate_sub">
+                 <ul class="cf"> <li><span><a href="{:U('home/article/index/category/'.$cate_sub['name'])}">{$cate_sub.title}</a></span>
+                   <if condition="$cate_sub['child']">
+ <volist name="cate_sub['child']" id="cate_sub_two">
+<a href="{:U('/category='.$cate_sub_two['name'])}">{$cate_sub_two.title} </a>
+           
+                            </volist>
+                       
+                    </if> 
+              
+                </li> </ul>
+                </volist>
+               
+</div>
+            </div> </div>
+            </if>
+       
+        </div>
+</volist>
+        
+      </div></div>
+
+    <!--fenlei over-->
+    <ul class="menu-list cf">
+      <think:nav name="nav">
+                    	<eq name="nav.pid" value="0">
+                       <li>
+                            <a href="{$nav.url|get_nav_url}" target="<eq name='nav.target' value='1'>_blank<else/>_self</eq>">{$nav.title}</a>
+                      </li>
+                        </eq>
+                    </think:nav>
+    </ul>
+    
+  </div>   <script>
+    $(".menu-list li").eq(0).css('background','#d25400');  
+     </script> <!--首页高亮-->  
+</div><!--menu over-->
+    
+<!--pic begin--><!--幻灯片首个li设置class为CurrentPic-->
+<script>$().ready(function () {
+	  $(".LunBoslide>li").eq(0).attr("class","CurrentPic");
+	  })</script>
+<div class="LunBo">
+<ul class="LunBoslide"><volist name="slide" id="vo"> <li><a href="{:U('Article/activity?id='.$vo['id'])}" > <img src="{$vo.icon|get_cover='path'}"/></a> </li></volist>
+</ul>
+<div class="LunBoNum">
+<span class="CurrentNum">1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+</div>
+</div>
+
+<script type="text/javascript" language="javascript">
+var PicTotal = 5;
+var CurrentIndex;
+var ToDisplayPicNumber = 0;
+$("div.LunBo div.LunBoNum span").click(DisplayPic);
+function DisplayPic() {
+// 测试是父亲的第几个儿子
+CurrentIndex = $(this).index();
+// 删除所有同级兄弟的类属性
+$(this).parent().children().removeClass("CurrentNum")
+// 为当前元素添加类
+$(this).addClass("CurrentNum");
+// 隐藏全部图片
+var Pic = $(this).parent().parent().children("ul");
+$(Pic).children().hide();
+// 显示指定图片
+$(Pic).children("li").eq(CurrentIndex).show();
+}
+function PicNumClick() {
+$("div.LunBo div.LunBoNum span").eq(ToDisplayPicNumber).trigger("click");
+ToDisplayPicNumber = (ToDisplayPicNumber + 1) % PicTotal;
+setTimeout("PicNumClick()",3000);
+}
+setTimeout("PicNumClick()",3000);
+</script>
+
+ <!--pic over-->
+
+
+<div  class="rside">
+<span><img data-img="2" src="http://img12.360buyimg.com/da/jfs/t307/47/730614248/16617/d99caa4b/542157edN66043046.jpg" width="310" height="70" alt=""></span>
+<div class="note"><ul><li class="selected">公告</li><li>活动</li></ul></div>
+<div id="msg">
+<div class="message"><ul><article:list name="article" limit="6" category="56" child="true"><li><a href="{:U('Article/detail?id='.$vo['id'])}">
+                     {$article.title}</a></li></article:list> </ul></div>
+<div class="message"  style="display: none"><ul><article:list name="article" category="52" limit="6"  child="true"><li><a href="{:U('Article/detail?id='.$vo['id'])}">
+                     {$article.title}</a></li></article:list></div>
+<div class="message"  style="display: none"></div>
+</div>
+</div>
+
+</div><!--flexcontainer over-->
+
+
+<!--循环开始-->
+
+<volist name="articlelist" limit="10" id="vo">
+<div class="r-t2 floor_title "><img src="{$vo.ypid|get_category_icon|get_cover='path'}"  width="200" height="50"/>{$vo.ypid|get_category_title}</div>
+<div class="r-p-wrap">
+<div class="bpic"><article:position name="pos" pos="2" limit="1" cate="57" >
+<a href="{:U('Article/detail?id='.$pos['id'])}" target="_blank"><img src="{$pos.id|get_good_adid|get_cover='path'}"/>
+</article:position></a></div>
+
+<!--栏目推荐位调用结束-->
+<!--栏目文章调用开始-->
+<ul class="r-list"><php>
+ if(!empty($vo['goodid'])){ $ids= explode(',',$vo['goodid']);}else{
+ 
+ $ids="";}</php>
+    <notempty name="ids">
+             <volist name="ids" id="v">
+                   
+           
+<li>
+                    <div class="pic" name="55">
+                        <a class="sy" benlai-source="1" benlai-location="13-1" href="{:U('Article/detail?id='.$v)}" target="_blank" title="{$article.title}">
+                            <img width="140" height="140"   src="{$v|get_cover_id|get_cover='path'}" style="display: inline; opacity: 1; margin-top: 0px;"></a>
+                        <div class="buy" >
+                            <a href="javascript:;" onclick="AddProductToCart({$v})">
+                                <img width="140" height="30" src="__STATIC__/images/btn_buy.gif" style="width:140px;height:30px;">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="name"><a href="{:U('Article/detail?id='.$v)}" benlai-source="1" benlai-location="13-1" target="_blank" title="{$v|get_good_shorttitle}">{$v|get_good_shorttitle}</a></div>
+                    <div class="price">
+                        <font>￥</font><span>{$v|get_good_price}</span>
+                        <span style="color: #999999; font-size: 12px; font-weight: 400; margin-left: 3px; text-decoration: line-through">{$v|get_good_yprice}</span>
+                    </div>
+  </li>   </volist>
+        </notempty> 
+        
+        <empty name="ids">
+			
+				 <li> aoh，暂无数据 </li> ！
+				
+		</empty>
+                </ul>
+				<!--栏目文章调用开始-->
+</div></volist> 
+<!--循环结束-->
+ 
+<script type="text/javascript">
+
+function AddProductToCart(i)
+{ var a='{$url}';
+	var goodid=i;
+var url='{:U("Shopcart/addItem")}';//地址
+$.ajax({
+type:'post', //传送的方式,get/post
+url:'{:U("Shopcart/addgood")}', //发送数据的地址
+ data:{
+	 id:goodid,tag:1
+ },
+ dataType: "json",
+success:function(data)
+{
+
+var html='<li><img src="'+data.src+'">'+data.title+'<span class="red" style="text-align:left"> '
++data.price+'元</span>'+'<a name="'+goodid+'" rel="del" class="red" onclick="delcommon(event)">删除</a>'+'</li>';//创建节点
+if(data.exsit=="1"){
+	alert("购物车已存在该商品，数量+1");
+//后台返回数据，判断购物车中是否已存在，存在，不追加节点
+
+}	
+else{
+alert(data.msg);//后台返回数据，判断购物车中是否已存在，不存在，追加节点
+	$("p.sc_goods_none").remove();//移除节点
+$("ul.sc_goods_ul").append(html);//追加节点
+
+}
+if(data.num=="0"){ //判断数量是否为0，为0则隐藏底部查看工具
+						$("div.sc_goods_foot").hide();
+	}
+	else{$("div.sc_goods_foot").show();}
+},
+error:function (XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})
+}
+
+	function delcommon(event) { //获取事件源
+event = event ? event : window.event; 
+var obj = event.srcElement ? event.srcElement : event.target; 
+//这时obj就是触发事件的对象，可以使用它的各个属性 
+//还可以将obj转换成jquery对象，方便选用其他元素 
+str = obj.innerHTML.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+
+	var $obj = $(obj);
+	
+	if(obj.rel=="del")
+{ var gid=obj.name;
+var array=$("#div2 li");//登录用户显示的li的个数
+var arr=$("#goods li");//未登录用户显示的li的个数
+	//全选的实现 定义删的发送路径
+	if(array.length!==4){
+		var del='{:U("Shopcart/delItem")}';
+	
+	}
+else{
+var del='{:U("Shopcart/delItemByuid")}';
+	
+	}
+$.ajax({
+type:'post', //传送的方式,get/post
+url:del, //发送数据的地址
+data:{id:gid},
+ dataType: "json",
+success:function(data)
+{var $obj = $(obj);
+	$obj.parent().remove();
+
+	if(data.num=="0"){  //判断购物车数量是否为0，为0则隐藏底部查看工具
+						$("div.sc_goods_foot").hide();
+						var html='<p class="sc_goods_none" >您的购物车还是空的，赶紧行动吧！</p>';
+					$("ul.sc_goods_ul").html(html);
+				
+	
+	}
+	else{$("div.sc_goods_foot").show();}
+
+},
+error:function (event, XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})
+}
+	
+	} 
+  var oDiv1 = document.getElementById('div1');
+            var oDiv2 = document.getElementById('div2');
+            var timer = null;//定义定时器变量
+            //鼠标移入div1或div2都把定时器关闭了，不让他消失
+            oDiv1.onmouseover = oDiv2.onmouseover = function ()
+            {
+                oDiv2.style.display = 'block';
+                clearTimeout(timer);
+            }
+            //鼠标移出div1或div2都重新开定时器，让他延时消失
+            oDiv1.onmouseout = oDiv2.onmouseout = function ()
+            {
+                //开定时器
+                timer = setTimeout(function () { 
+                    oDiv2.style.display = 'none'; }, 200);
+            }
+			
+			var a= document.getElementById('shopping_cart');
+  var b = document.getElementById('goods');
+            var timer5 = null;//定义定时器变量
+            //鼠标移入div1或div2都把定时器关闭了，不让他消失
+            a.onmouseover = b.onmouseover = function ()
+            {
+                b.style.display = 'block';
+                clearTimeout(timer5);
+            }
+            //鼠标移出div1或div2都重新开定时器，让他延时消失
+            a.onmouseout = b.onmouseout = function ()
+            {
+                //开定时器
+                timer5= setTimeout(function () { 
+                    b.style.display = 'none'; }, 500);
+            }
+			</script>
+
+
+            
+</block> 

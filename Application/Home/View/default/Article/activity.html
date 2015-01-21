@@ -1,0 +1,30 @@
+<extend name="Base/pageall"/>
+
+
+
+<block name="body">
+     
+   <section>
+	  <div class="Articlelist"><h3>{$title}</h3><empty name="list">
+ <div class="media">暂无数据</div>
+</empty>
+    
+                <div class="media">
+                <ul> <volist name="list" id="vo"><li>
+                <a href="{:U('Article/detail?id='.$vo['goodid'])}"><img src="{$vo.goodid|get_cover_id|get_cover='path'}"> </a> 
+                </li> </volist>
+                </ul>  
+                  
+                </div>
+              
+             
+                <hr/>
+          
+			</div>
+ <!-- 分页 -->
+        <div class="page">
+{$page}
+        </div>
+    </section>
+    
+</block>

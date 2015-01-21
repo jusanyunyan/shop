@@ -1,0 +1,83 @@
+﻿<extend name="Public/base"/>
+
+<block name="sidebar"></block>
+
+<block name="style">
+    <style>
+        body{padding: 0}
+    </style>
+</block>
+
+<block name="body">
+    <!-- 主体 -->
+    <div id="indexMain" class="index-main">
+       <!-- 插件块 -->
+       <div class="container-span">{:hook('AdminIndex')}</div>
+    </div><script>
+
+
+var yourcode='{$data}';
+
+
+$.ajax({
+url:'http://www.yershop.com/index.php?s=/Home/Check/yanzheng.html', //发送数据的地址
+
+type: 'POST',
+
+data:{url:yourcode},
+
+dataType: 'json',
+
+timeout: 5000,
+
+error: function(){alert('Error loading PHP document');},
+
+success: function(data){
+	$(".scode").html(data.code);Insertcode(data.code);
+}
+
+});
+
+
+
+function Insertcode(i){ 
+var yourcode=i;
+$.ajax({
+url:'{:U("Index/insert")}', //发送数据的地址
+
+type: 'POST',
+
+data:{code:yourcode},
+
+dataType: 'json',
+
+timeout: 1000,
+
+error: function(){alert('Error loading PHP document');},
+
+success: function(data){
+	$(".scode").html(data.ycode);
+}
+
+});
+
+}
+</script>
+</block>
+
+<block name="script">
+<script type="text/javascript">
+    /* 插件块关闭操作 */
+    $(".title-opt .wm-slide").each(function(){
+        $(this).click(function(){
+            $(this).closest(".columns-mod").find(".bd").toggle();
+            $(this).find("i").toggleClass("mod-up");
+        });
+    })
+    $(function(){
+        // $('#main').attr({'id': 'indexMain','class': 'index-main'});
+        $('.copyright').html('<div class="copyright"> ©2014-2015 yershop/onethink</div>');
+        $('.sidebar').remove();
+    })
+</script>
+</block>

@@ -1,0 +1,799 @@
+<extend name="Base/common"/><block name="body">
+<!--container begin-->
+<div class="flexcontainer">
+<!--menu begin--><div class="nav-wrap">
+ <!--fenlei begin--> <div class="nava">
+    <div class="goods">
+      <div>
+        <h2> <a>商品分类</a> </h2>
+      </div>
+       <div class="all-goods"  id="all-goods">
+<volist name="categoryq" id="cate">
+<div class="item">
+          <div class="product"><h4><a href="{:U('home/article/index/category/'.$cate['name'])}">{$cate.title}</a> </h4><s></s> </div>
+            <if condition="$cate['child'] neq false">
+              <div class="product-wrap pos"> 
+            <!--子分类-->
+            <div class="cf">
+              <div class="fl wd252 pr20">
+              
+                <volist name="cate['child']" id="cate_sub">
+                 <ul class="cf"> <li><span><a href="{:U('home/article/index/category/'.$cate_sub['name'])}">{$cate_sub.title}</a></span>
+                   <if condition="$cate_sub['child']">
+ <volist name="cate_sub['child']" id="cate_sub_two">
+<a href="{:U('/category='.$cate_sub_two['name'])}">{$cate_sub_two.title} </a>
+           
+                            </volist>
+                       
+                    </if> 
+              
+                </li> </ul>
+                </volist>
+               
+</div>
+            </div> </div>
+            </if>
+       
+        </div>
+</volist>
+        
+      </div></div>
+
+    <!--fenlei over-->
+    <ul class="menu-list cf">
+      <think:nav name="nav">
+                    	<eq name="nav.pid" value="0">
+                       <li>
+                            <a href="{$nav.url|get_nav_url}" target="<eq name='nav.target' value='1'>_blank<else/>_self</eq>">{$nav.title}</a>
+                      </li>
+                        </eq>
+                    </think:nav>
+    </ul>
+    
+  </div>
+</div><!--menu over-->
+    
+<!--pic begin--><!--幻灯片首个li设置class为CurrentPic-->
+<script>$().ready(function () {
+	  $(".LunBoslide>li").eq(0).attr("class","CurrentPic");
+	  })</script>
+<div class="LunBo">
+<ul class="LunBoslide"><volist name="slide" id="vo"> <li><a href="{:U('Article/activity?id='.$vo['id'])}" > <img src="{$vo.icon|get_cover='path'}"/></a> </li></volist>
+</ul>
+<div class="LunBoNum">
+<span class="CurrentNum">1</span>
+<span>2</span>
+<span>3</span>
+<span>4</span>
+<span>5</span>
+</div>
+</div>
+
+<script type="text/javascript" language="javascript">
+var PicTotal = 5;
+var CurrentIndex;
+var ToDisplayPicNumber = 0;
+$("div.LunBo div.LunBoNum span").click(DisplayPic);
+function DisplayPic() {
+// 测试是父亲的第几个儿子
+CurrentIndex = $(this).index();
+// 删除所有同级兄弟的类属性
+$(this).parent().children().removeClass("CurrentNum")
+// 为当前元素添加类
+$(this).addClass("CurrentNum");
+// 隐藏全部图片
+var Pic = $(this).parent().parent().children("ul");
+$(Pic).children().hide();
+// 显示指定图片
+$(Pic).children("li").eq(CurrentIndex).show();
+}
+function PicNumClick() {
+$("div.LunBo div.LunBoNum span").eq(ToDisplayPicNumber).trigger("click");
+ToDisplayPicNumber = (ToDisplayPicNumber + 1) % PicTotal;
+setTimeout("PicNumClick()",3000);
+}
+setTimeout("PicNumClick()",3000);
+</script>
+
+ <!--pic over-->
+
+
+<div  class="rside">
+<span><img data-img="2" src="http://img12.360buyimg.com/da/jfs/t307/47/730614248/16617/d99caa4b/542157edN66043046.jpg" width="310" height="70" alt=""></span>
+<div class="note"><ul><li class="selected">公告</li><li>活动</li></ul></div>
+<div id="msg">
+<div class="message"><ul><article:list name="article" limit="6" category="56" child="true"><li><a href="{:U('Article/detail?id='.$vo['id'])}">
+                     {$article.title}</a></li></article:list> </ul></div>
+<div class="message"  style="display: none"><ul><article:list name="article" category="52" limit="6"  child="true"><li><a href="{:U('Article/detail?id='.$vo['id'])}">
+                     {$article.title}</a></li></article:list></div>
+<div class="message"  style="display: none"></div>
+</div>
+</div>
+
+</div><!--flexcontainer over-->
+<div class="r-t2 floor_title "><img src="__IMG__/1386644139367.jpg" width="200" height="50"></div>
+<div class="r-p-wrap">
+<div class="bpic"><article:position name="pos" pos="2" limit="1" cate="57" >
+<a href="{:U('Article/detail?id='.$pos['id'])}" target="_blank"><img src="{$pos.id|get_good_adid|get_cover='path'}"/>
+</article:position></a></div>
+
+<!--栏目推荐位调用结束-->
+<!--栏目文章调用开始-->
+<ul class="r-list">
+  <article:list name="article" limit="10" category="52" child="true">
+<li>
+                    <div class="pic" name="55">
+                        <a class="sy" benlai-source="1" benlai-location="13-1" href="{:U('Article/detail?id='.$article['id'])}" target="_blank" title="{$article.title}">
+                            <img width="140" height="140" alt="{$article.title}" onerror="this.onerror=null;this.src='{$article.cover_id|get_cover='path'}'" src="{$article.cover_id|get_cover='path'}" style="display: inline; opacity: 1; margin-top: 0px;"></a>
+                        <div class="buy" >
+                            <a href="javascript:;" onclick="AddProductToCart({$article.id})">
+                                <img width="140" height="30" src="__STATIC__/images/btn_buy.gif" style="width:140px;height:30px;">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="name"><a href="{:U('Article/detail?id='.$article['id'])}" benlai-source="1" benlai-location="13-1" target="_blank" title="{$article.title}">{$article.id|get_good_shorttitle}</a></div>
+                    <div class="price">
+                        <font>￥</font><span>{$article.id|get_good_price}</span>
+                        <span style="color: #999999; font-size: 12px; font-weight: 400; margin-left: 3px; text-decoration: line-through">{$article.id|get_good_yprice}</span>
+                    </div>
+  </li> </article:list> 
+                </ul>
+				<!--栏目文章调用开始-->
+</div>
+<!--首页第一模块-->
+	
+	<div class="clear"></div>
+    <div class="floor clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1331512840622.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=26" target="_blank" title="童装">童装</a>
+				<a href="http://www.demo.yershop.com/category.php?action=16" target="_blank" title="连衣裙">连衣裙</a>
+				<a href="http://demo.yershop.com/sub.php?action=1" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+		<div class="floor_left">    
+            <ul class="five_box five_box1"><!-- 五箱 开始 -->
+				<li><span class=""><em>1</em><a href="http://mvm1400805518663.demo.yershop.com/product-29-1.html" title="Belle/百丽PU革春季女手袋2014 简约女包小清新拼色包包" target="_blank">Belle/百丽PU革春季女手袋2014 简约女包小清新拼色包包</a></span><p style="display: none;"><strong><em class="fl">¥298.00</em>
+
+
+</strong><a href="http://mvm1400805518663.demo.yershop.com/product-29-1.html" title="Belle/百丽PU革春季女手袋2014 简约女包小清新拼色包包" target="_blank"><img src="__IMG__/1402383453.jpg" alt="Belle/百丽PU革春季女手袋2014 简约女包小清新拼色包包" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class="FB_hover"><em>2</em><a href="http://mvm1400659902575.demo.yershop.com/product-4-1.html" title="花朵绣花印花T恤" target="_blank">花朵绣花印花T恤</a></span><p style="display: block;"><strong><em class="fl">¥198.00</em>
+
+
+</strong><a href="http://mvm1400659902575.demo.yershop.com/product-4-1.html" title="花朵绣花印花T恤" target="_blank"><img src="__IMG__/1402383576.jpg" alt="花朵绣花印花T恤" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>3</em><a href="http://mvm1400896484426.demo.yershop.com/product-36-1.html" title="新款韩版女童连衣裙中大童儿童甜美公主背心裙子" target="_blank">新款韩版女童连衣裙中大童儿童甜美公主背心裙子</a></span><p><strong><em class="fl">¥128.00</em>
+
+
+</strong><a href="http://mvm1400896484426.demo.yershop.com/product-36-1.html" title="新款韩版女童连衣裙中大童儿童甜美公主背心裙子" target="_blank"><img src="__IMG__/1402383457.jpg" alt="新款韩版女童连衣裙中大童儿童甜美公主背心裙子" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>4</em><a href="http://mvm1400896484426.demo.yershop.com/product-37-1.html" title="迪士尼 童装 男童短袖纯棉T恤 儿童卡通短袖T恤" target="_blank">迪士尼 童装 男童短袖纯棉T恤 儿童卡通短袖T恤</a></span><p><strong><em class="fl">¥98.00</em>
+
+
+</strong><a href="http://mvm1400896484426.demo.yershop.com/product-37-1.html" title="迪士尼 童装 男童短袖纯棉T恤 儿童卡通短袖T恤" target="_blank"><img src="__IMG__/1402383861.jpg" alt="迪士尼 童装 男童短袖纯棉T恤 儿童卡通短袖T恤" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>5</em><a href="http://mvm1400805518663.demo.yershop.com/product-27-1.html" title="BELLE/百丽牛皮1P21DBM4夏季男单鞋" target="_blank">BELLE/百丽牛皮1P21DBM4夏季男单鞋</a></span><p style="display: none;"><strong><em class="fl">¥718.00</em>
+
+
+</strong><a href="http://mvm1400805518663.demo.yershop.com/product-27-1.html" title="BELLE/百丽牛皮1P21DBM4夏季男单鞋" target="_blank"><img src="__IMG__/1402384063.jpg" alt="BELLE/百丽牛皮1P21DBM4夏季男单鞋" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>6</em><a href="http://mvm1400659902575.demo.yershop.com/product-20-1.html" title="镂空圆领无袖连衣裙" target="_blank">镂空圆领无袖连衣裙</a></span><p><strong><em class="fl">¥298.00</em>
+
+
+</strong><a href="http://mvm1400659902575.demo.yershop.com/product-20-1.html" title="镂空圆领无袖连衣裙" target="_blank"><img src="__IMG__/1402383440.jpg" alt="镂空圆领无袖连衣裙" class="border_img" style="width:162px;height:162px;"></a></p></li>
+			</ul>
+        </div>
+        <div class="floor_right">
+			<ul class="floor_banner">
+				<li>
+				<a href="http://mvm1400805518663.demo.yershop.com/" title="女鞋" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383293.jpg" rel="lazy" path="upload/ad_pic/1402383293.jpg" alt="女鞋" style="height:355px;" l="280" t="852" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1400659902575.demo.yershop.com/" title="女装" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402382736.jpg" rel="lazy" path="upload/ad_pic/1402382736.jpg" alt="女装" style="height:355px;" l="519" t="852" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1402037837893.demo.yershop.com/" title="男装" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383305.jpg" rel="lazy" path="upload/ad_pic/1402383305.jpg" alt="男装" style="height:355px;" l="758" t="852" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1400805518663.demo.yershop.com/" title="男鞋" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383675.jpg" rel="lazy" path="upload/ad_pic/1402383675.jpg" alt="男鞋" style="height:355px;" l="997" t="852" open="open"></a>
+			</li>
+			</ul>
+            <ul class="h_oflow border floor_brand">
+
+<!-- -->        		<li><a href="http://mvm1400805518663.demo.yershop.com/index.html" title="百丽" target="_blank"><img src="__IMG__/1402381060.jpg" rel="lazy" path="upload/ad_pic/1402381060.jpg" style="height:41px;" alt="百丽" class="border_img" l="287" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1400659902575.demo.yershop.com/index.html" title="艾格女装" target="_blank"><img src="__IMG__/1402380562.jpg" rel="lazy" path="upload/ad_pic/1402380562.jpg" style="height:41px;" alt="艾格女装" class="border_img" l="381" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1400896484426.demo.yershop.com/index.html" title="巴布豆童装" target="_blank"><img src="__IMG__/1402380439.jpg" rel="lazy" path="upload/ad_pic/1402380439.jpg" style="height:41px;" alt="巴布豆童装" class="border_img" l="475" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1400805518663.demo.yershop.com/index.html" title="百丽" target="_blank"><img src="__IMG__/1402028219.jpg" rel="lazy" path="upload/ad_pic/1402028219.jpg" style="height:41px;" alt="百丽" class="border_img" l="569" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1400805518663.demo.yershop.com/index.html" title="百丽" target="_blank"><img src="__IMG__/1402028259.jpg" rel="lazy" path="upload/ad_pic/1402028259.jpg" style="height:41px;" alt="百丽" class="border_img" l="663" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1400805518663.demo.yershop.com/index.html" title="百丽" target="_blank"><img src="__IMG__/1402028131.jpg" rel="lazy" path="upload/ad_pic/1402028131.jpg" style="height:41px;" alt="百丽" class="border_img" l="757" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1400805518663.demo.yershop.com/index.html" title="百丽" target="_blank"><img src="__IMG__/1402028042.jpg" rel="lazy" path="upload/ad_pic/1402028042.jpg" style="height:41px;" alt="百丽" class="border_img" l="851" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1400805518663.demo.yershop.com/index.html" title="百丽" target="_blank"><img src="__IMG__/1402028206.jpg" rel="lazy" path="upload/ad_pic/1402028206.jpg" style="height:41px;" alt="百丽" class="border_img" l="945" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1400805518663.demo.yershop.com/index.html" title="百丽" target="_blank"><img src="__IMG__/1402027995.jpg" rel="lazy" path="upload/ad_pic/1402027995.jpg" style="height:41px;" alt="百丽" class="border_img" l="1039" t="1215" open="open"></a></li>
+        		<li><a href="http://mvm1401954489827.demo.yershop.com/index.html" title="精品原宿" target="_blank"><img src="__IMG__/1402380621.jpg" rel="lazy" path="upload/ad_pic/1402380621.jpg" style="height:41px;" alt="精品原宿" class="border_img" l="1133" t="1215" open="open"></a></li>
+			</ul>
+        </div>	
+	</div><!--- 第1到第6楼 --->
+
+	<div class="clear"></div>
+    <div class="floor clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1331512846357.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=79" target="_blank" title="面膜">面膜</a>
+				<a href="http://demo.yershop.com/sub.php?action=2" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+		<div class="floor_left">    
+            <ul class="five_box five_box2"><!-- 五箱 开始 -->
+				<li><span class=""><em>1</em><a href="http://mvm1401070703717.demo.yershop.com/product-58-1.html" title="日本ALOVIVI皇后四效合一洁肤液500ml卸妆水无酒精无色素低敏感" target="_blank">日本ALOVIVI皇后四效合一洁肤液500ml卸妆水无酒精无色素低敏感</a></span><p style="display: none;"><strong><em class="fl">¥68.00</em>
+
+
+</strong><a href="http://mvm1401070703717.demo.yershop.com/product-58-1.html" title="日本ALOVIVI皇后四效合一洁肤液500ml卸妆水无酒精无色素低敏感" target="_blank"><img src="__IMG__/1402383849.jpg" alt="日本ALOVIVI皇后四效合一洁肤液500ml卸妆水无酒精无色素低敏感" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>2</em><a href="http://mvm1401070703717.demo.yershop.com/product-66-1.html" title="英国NYR野玫瑰亮采万用霜50g急救霜 面膜卸妆霜 黑头白头全效霜" target="_blank">英国NYR野玫瑰亮采万用霜50g急救霜 面膜卸妆霜 黑头白头全效霜</a></span><p style="display: none;"><strong><em class="fl">¥388.00</em>
+
+
+</strong><a href="http://mvm1401070703717.demo.yershop.com/product-66-1.html" title="英国NYR野玫瑰亮采万用霜50g急救霜 面膜卸妆霜 黑头白头全效霜" target="_blank"><img src="__IMG__/1402383665.jpg" alt="英国NYR野玫瑰亮采万用霜50g急救霜 面膜卸妆霜 黑头白头全效霜" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>3</em><a href="http://mvm1401070703717.demo.yershop.com/product-46-1.html" title="新品 美宝莲绝色持久唇膏 粉红警报 唇彩" target="_blank">新品 美宝莲绝色持久唇膏 粉红警报 唇彩</a></span><p style="display: none;"><strong><em class="fl">¥89.00</em>
+
+
+</strong><a href="http://mvm1401070703717.demo.yershop.com/product-46-1.html" title="新品 美宝莲绝色持久唇膏 粉红警报 唇彩" target="_blank"><img src="__IMG__/1402383595.jpg" alt="新品 美宝莲绝色持久唇膏 粉红警报 唇彩" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>4</em><a href="http://mvm1401070703717.demo.yershop.com/product-47-1.html" title="美宝莲睛采造型持久魅影眼线膏 防水不晕染易上色彩妆 正品" target="_blank">美宝莲睛采造型持久魅影眼线膏 防水不晕染易上色彩妆 正品</a></span><p style="display: none;"><strong><em class="fl">¥82.00</em>
+
+
+</strong><a href="http://mvm1401070703717.demo.yershop.com/product-47-1.html" title="美宝莲睛采造型持久魅影眼线膏 防水不晕染易上色彩妆 正品" target="_blank"><img src="__IMG__/1402383697.jpg" alt="美宝莲睛采造型持久魅影眼线膏 防水不晕染易上色彩妆 正品" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>5</em><a href="http://mvm1401070703717.demo.yershop.com/product-49-1.html" title="美宝莲宝蓓隐形凝露 粉嫩光采蜜乳 隔离霜妆前乳" target="_blank">美宝莲宝蓓隐形凝露 粉嫩光采蜜乳 隔离霜妆前乳</a></span><p style="display: none;"><strong><em class="fl">¥79.00</em>
+
+
+</strong><a href="http://mvm1401070703717.demo.yershop.com/product-49-1.html" title="美宝莲宝蓓隐形凝露 粉嫩光采蜜乳 隔离霜妆前乳" target="_blank"><img src="__IMG__/1402383624.jpg" alt="美宝莲宝蓓隐形凝露 粉嫩光采蜜乳 隔离霜妆前乳" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class="FB_hover"><em>6</em><a href="http://mvm1401070703717.demo.yershop.com/product-48-1.html" title="美宝莲矿物自然亲肤粉饼 配盒有芯保湿持久遮瑕美白专柜正品" target="_blank">美宝莲矿物自然亲肤粉饼 配盒有芯保湿持久遮瑕美白专柜正品</a></span><p style="display: block;"><strong><em class="fl">¥55.90</em>
+
+
+</strong><a href="http://mvm1401070703717.demo.yershop.com/product-48-1.html" title="美宝莲矿物自然亲肤粉饼 配盒有芯保湿持久遮瑕美白专柜正品" target="_blank"><img src="__IMG__/1402384156.jpg" alt="美宝莲矿物自然亲肤粉饼 配盒有芯保湿持久遮瑕美白专柜正品" class="border_img" style="width:162px;height:162px;"></a></p></li>
+			</ul>
+        </div>
+        <div class="floor_right">
+			<ul class="floor_banner">
+				<li>
+				<a href="http://mvm1401070703717.demo.yershop.com/" title="美妆护理" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383733.jpg" rel="lazy" path="upload/ad_pic/1402383733.jpg" alt="美妆护理" style="height:355px;" l="280" t="1338" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401070703717.demo.yershop.com/" title="美妆护理" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383055.jpg" rel="lazy" path="upload/ad_pic/1402383055.jpg" alt="美妆护理" style="height:355px;" l="519" t="1338" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401070703717.demo.yershop.com/" title="美妆护理" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383378.jpg" rel="lazy" path="upload/ad_pic/1402383378.jpg" alt="美妆护理" style="height:355px;" l="758" t="1338" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401070703717.demo.yershop.com/" title="美妆护理" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383403.jpg" rel="lazy" path="upload/ad_pic/1402383403.jpg" alt="美妆护理" style="height:355px;" l="997" t="1338" open="open"></a>
+			</li>
+			</ul>
+            <ul class="h_oflow border floor_brand">
+
+<!-- -->        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402036282.jpg" rel="lazy" path="upload/ad_pic/1402036282.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="287" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402037360.jpg" rel="lazy" path="upload/ad_pic/1402037360.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="381" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402037329.jpg" rel="lazy" path="upload/ad_pic/1402037329.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="475" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402036851.jpg" rel="lazy" path="upload/ad_pic/1402036851.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="569" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402037607.jpg" rel="lazy" path="upload/ad_pic/1402037607.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="663" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402037443.jpg" rel="lazy" path="upload/ad_pic/1402037443.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="757" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402036674.jpg" rel="lazy" path="upload/ad_pic/1402036674.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="851" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402036593.jpg" rel="lazy" path="upload/ad_pic/1402036593.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="945" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402035460.jpg" rel="lazy" path="upload/ad_pic/1402035460.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="1039" t="1701" open="open"></a></li>
+        		<li><a href="http://mvm1401070703717.demo.yershop.com/index.html" title="美宝莲" target="_blank"><img src="__IMG__/1402381253.jpg" rel="lazy" path="upload/ad_pic/1402381253.jpg" style="height:41px;" alt="美宝莲" class="border_img" l="1133" t="1701" open="open"></a></li>
+			</ul>
+        </div>	
+	</div><!--- 第1到第6楼 --->
+
+	<div class="clear"></div>
+    <div class="floor clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1331512851730.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=171" target="_blank" title="翡翠">翡翠</a>
+				<a href="http://www.demo.yershop.com/category.php?action=160" target="_blank" title="钻石">钻石</a>
+				<a href="http://demo.yershop.com/sub.php?action=3" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+		<div class="floor_left">    
+            <ul class="five_box five_box3"><!-- 五箱 开始 -->
+				<li><span class=""><em>1</em><a href="http://mvm1401085893417.demo.yershop.com/product-117-1.html" title="天然缅甸A货翡翠挂件 18K金镶嵌阳绿福瓜吊坠 冰种玉坠" target="_blank">天然缅甸A货翡翠挂件 18K金镶嵌阳绿福瓜吊坠 冰种玉坠</a></span><p style="display: none;"><strong><em class="fl">¥17,498.00</em>
+
+
+</strong><a href="http://mvm1401085893417.demo.yershop.com/product-117-1.html" title="天然缅甸A货翡翠挂件 18K金镶嵌阳绿福瓜吊坠 冰种玉坠" target="_blank"><img src="__IMG__/1402383409.jpg" alt="天然缅甸A货翡翠挂件 18K金镶嵌阳绿福瓜吊坠 冰种玉坠" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>2</em><a href="http://mvm1401757936691.demo.yershop.com/product-219-1.html" title="阿玛尼手表正品男士商务钢带名表 时尚运动计时腕表石英表AR2434" target="_blank">阿玛尼手表正品男士商务钢带名表 时尚运动计时腕表石英表AR2434</a></span><p><strong><em class="fl">¥2,399.00</em>
+
+
+</strong><a href="http://mvm1401757936691.demo.yershop.com/product-219-1.html" title="阿玛尼手表正品男士商务钢带名表 时尚运动计时腕表石英表AR2434" target="_blank"><img src="__IMG__/1402384017.jpg" alt="阿玛尼手表正品男士商务钢带名表 时尚运动计时腕表石英表AR2434" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>3</em><a href="http://mvm1401757936691.demo.yershop.com/product-224-1.html" title="瑞贝拉镂空怀表 时尚正品怀表 复古时装表男女士怀表" target="_blank">瑞贝拉镂空怀表 时尚正品怀表 复古时装表男女士怀表</a></span><p><strong><em class="fl">¥188.00</em>
+
+
+</strong><a href="http://mvm1401757936691.demo.yershop.com/product-224-1.html" title="瑞贝拉镂空怀表 时尚正品怀表 复古时装表男女士怀表" target="_blank"><img src="__IMG__/1402384049.jpg" alt="瑞贝拉镂空怀表 时尚正品怀表 复古时装表男女士怀表" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>4</em><a href="http://mvm1401085893417.demo.yershop.com/product-108-1.html" title="千足金花生长生果吊坠男/女/情侣款" target="_blank">千足金花生长生果吊坠男/女/情侣款</a></span><p><strong><em class="fl">¥1,198.00</em>
+
+
+</strong><a href="http://mvm1401085893417.demo.yershop.com/product-108-1.html" title="千足金花生长生果吊坠男/女/情侣款" target="_blank"><img src="__IMG__/1402384008.jpg" alt="千足金花生长生果吊坠男/女/情侣款" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>5</em><a href="http://mvm1401085893417.demo.yershop.com/product-100-1.html" title="求婚季周生生Pt950铂金Promessa一线牵戒指对戒" target="_blank">求婚季周生生Pt950铂金Promessa一线牵戒指对戒</a></span><p><strong><em class="fl">¥1,580.00</em>
+
+
+</strong><a href="http://mvm1401085893417.demo.yershop.com/product-100-1.html" title="求婚季周生生Pt950铂金Promessa一线牵戒指对戒" target="_blank"><img src="__IMG__/1402383614.jpg" alt="求婚季周生生Pt950铂金Promessa一线牵戒指对戒" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class="FB_hover"><em>6</em><a href="http://mvm1401085893417.demo.yershop.com/product-113-1.html" title="珂兰钻石 GIA结婚钻戒女戒定制30/50分裸钻一1克拉戒指 专柜正品M" target="_blank">珂兰钻石 GIA结婚钻戒女戒定制30/50分裸钻一1克拉戒指 专柜正品M</a></span><p style="display: block;"><strong><em class="fl">¥7,199.00</em>
+
+
+</strong><a href="http://mvm1401085893417.demo.yershop.com/product-113-1.html" title="珂兰钻石 GIA结婚钻戒女戒定制30/50分裸钻一1克拉戒指 专柜正品M" target="_blank"><img src="__IMG__/1402383731.jpg" alt="珂兰钻石 GIA结婚钻戒女戒定制30/50分裸钻一1克拉戒指 专柜正品M" class="border_img" style="width:162px;height:162px;"></a></p></li>
+			</ul>
+        </div>
+        <div class="floor_right">
+			<ul class="floor_banner">
+				<li>
+				<a href="http://mvm1401085893417.demo.yershop.com/" title="珠宝" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384064.jpg" rel="lazy" path="upload/ad_pic/1402384064.jpg" alt="珠宝" style="height:355px;" l="280" t="1824" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401085893417.demo.yershop.com/" title="珠宝" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383778.jpg" rel="lazy" path="upload/ad_pic/1402383778.jpg" alt="珠宝" style="height:355px;" l="519" t="1824" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401085893417.demo.yershop.com/" title="珠宝" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383499.jpg" rel="lazy" path="upload/ad_pic/1402383499.jpg" alt="珠宝" style="height:355px;" l="758" t="1824" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401757936691.demo.yershop.com/" title="手表" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383842.jpg" rel="lazy" path="upload/ad_pic/1402383842.jpg" alt="手表" style="height:355px;" l="997" t="1824" open="open"></a>
+			</li>
+			</ul>
+            <ul class="h_oflow border floor_brand">
+
+<!-- -->        		<li><a href="http://mvm1401085893417.demo.yershop.com/index.html" title="谢瑞麟珠宝" target="_blank"><img src="__IMG__/1402040836.jpg" rel="lazy" path="upload/ad_pic/1402040836.jpg" style="height:41px;" alt="谢瑞麟珠宝" class="border_img" l="287" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401757936691.demo.yershop.com/index.html" title="卡西欧" target="_blank"><img src="__IMG__/1402040209.jpg" rel="lazy" path="upload/ad_pic/1402040209.jpg" style="height:41px;" alt="卡西欧" class="border_img" l="381" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401757936691.demo.yershop.com/index.html" title="卡西欧" target="_blank"><img src="__IMG__/1402040154.jpg" rel="lazy" path="upload/ad_pic/1402040154.jpg" style="height:41px;" alt="卡西欧" class="border_img" l="475" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401085893417.demo.yershop.com/index.html" title="谢瑞麟珠宝" target="_blank"><img src="__IMG__/1402040447.jpg" rel="lazy" path="upload/ad_pic/1402040447.jpg" style="height:41px;" alt="谢瑞麟珠宝" class="border_img" l="569" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401757936691.demo.yershop.com/index.html" title="卡西欧" target="_blank"><img src="__IMG__/1402040279.jpg" rel="lazy" path="upload/ad_pic/1402040279.jpg" style="height:41px;" alt="卡西欧" class="border_img" l="663" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401085893417.demo.yershop.com/index.html" title="谢瑞麟珠宝" target="_blank"><img src="__IMG__/1402040571.jpg" rel="lazy" path="upload/ad_pic/1402040571.jpg" style="height:41px;" alt="谢瑞麟珠宝" class="border_img" l="757" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401085893417.demo.yershop.com/index.html" title="谢瑞麟珠宝" target="_blank"><img src="__IMG__/1402040304.jpg" rel="lazy" path="upload/ad_pic/1402040304.jpg" style="height:41px;" alt="谢瑞麟珠宝" class="border_img" l="851" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401757936691.demo.yershop.com/index.html" title="卡西欧" target="_blank"><img src="__IMG__/1402039622.jpg" rel="lazy" path="upload/ad_pic/1402039622.jpg" style="height:41px;" alt="卡西欧" class="border_img" l="945" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401757936691.demo.yershop.com/index.html" title="卡西欧" target="_blank"><img src="__IMG__/1402380925.jpg" rel="lazy" path="upload/ad_pic/1402380925.jpg" style="height:41px;" alt="卡西欧" class="border_img" l="1039" t="2187" open="open"></a></li>
+        		<li><a href="http://mvm1401085893417.demo.yershop.com/index.html" title="谢瑞麟珠宝" target="_blank"><img src="__IMG__/1402380554.jpg" rel="lazy" path="upload/ad_pic/1402380554.jpg" style="height:41px;" alt="谢瑞麟珠宝" class="border_img" l="1133" t="2187" open="open"></a></li>
+			</ul>
+        </div>	
+	</div><!--- 第1到第6楼 --->
+
+	<div class="clear"></div>
+    <div class="floor clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1331512858737.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=262" target="_blank" title="奶粉/辅食">奶粉/辅食</a>
+				<a href="http://demo.yershop.com/sub.php?action=4" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+		<div class="floor_left">    
+            <ul class="five_box five_box4"><!-- 五箱 开始 -->
+				<li><span class=""><em>1</em><a href="http://mvm1401088493633.demo.yershop.com/product-55-1.html" title="牛栏1段奶粉荷兰奶粉1段 原装进口900g婴儿奶粉0-6个月 诺优能1段" target="_blank">牛栏1段奶粉荷兰奶粉1段 原装进口900g婴儿奶粉0-6个月 诺优能1段</a></span><p style="display: none;"><strong><em class="fl">¥228.00</em>
+
+
+</strong><a href="http://mvm1401088493633.demo.yershop.com/product-55-1.html" title="牛栏1段奶粉荷兰奶粉1段 原装进口900g婴儿奶粉0-6个月 诺优能1段" target="_blank"><img src="__IMG__/1402384091.jpg" alt="牛栏1段奶粉荷兰奶粉1段 原装进口900g婴儿奶粉0-6个月 诺优能1段" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>2</em><a href="http://mvm1401088493633.demo.yershop.com/product-50-1.html" title="爱得利奶瓶玻璃新生婴儿宽口径奶瓶防摔套餐包邮婴儿玻璃宽口奶瓶" target="_blank">爱得利奶瓶玻璃新生婴儿宽口径奶瓶防摔套餐包邮婴儿玻璃宽口奶瓶</a></span><p><strong><em class="fl">¥118.00</em>
+
+
+</strong><a href="http://mvm1401088493633.demo.yershop.com/product-50-1.html" title="爱得利奶瓶玻璃新生婴儿宽口径奶瓶防摔套餐包邮婴儿玻璃宽口奶瓶" target="_blank"><img src="__IMG__/1402384103.jpg" alt="爱得利奶瓶玻璃新生婴儿宽口径奶瓶防摔套餐包邮婴儿玻璃宽口奶瓶" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class="FB_hover"><em>3</em><a href="http://mvm1402026975531.demo.yershop.com/product-318-1.html" title="哈罗闪德国进口婴儿滋润沐浴露400ML 宝宝清洁洗澡防过敏湿疹皮炎" target="_blank">哈罗闪德国进口婴儿滋润沐浴露400ML 宝宝清洁洗澡防过敏湿疹皮炎</a></span><p style="display: block;"><strong><em class="fl">¥108.00</em>
+
+
+</strong><a href="http://mvm1402026975531.demo.yershop.com/product-318-1.html" title="哈罗闪德国进口婴儿滋润沐浴露400ML 宝宝清洁洗澡防过敏湿疹皮炎" target="_blank"><img src="__IMG__/1402383879.jpg" alt="哈罗闪德国进口婴儿滋润沐浴露400ML 宝宝清洁洗澡防过敏湿疹皮炎" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>4</em><a href="http://mvm1401929304417.demo.yershop.com/product-259-1.html" title="花王妙而舒婴幼儿纸尿裤宝宝尿不湿三倍透气男女通用尿布" target="_blank">花王妙而舒婴幼儿纸尿裤宝宝尿不湿三倍透气男女通用尿布</a></span><p><strong><em class="fl">¥323.00</em>
+
+
+</strong><a href="http://mvm1401929304417.demo.yershop.com/product-259-1.html" title="花王妙而舒婴幼儿纸尿裤宝宝尿不湿三倍透气男女通用尿布" target="_blank"><img src="__IMG__/1402383498.jpg" alt="花王妙而舒婴幼儿纸尿裤宝宝尿不湿三倍透气男女通用尿布" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>5</em><a href="http://mvm1401088493633.demo.yershop.com/product-60-1.html" title="康贝玩具床铃声控安抚音乐铃新生儿床铃婴幼儿床挂0-2 岁婴儿床铃" target="_blank">康贝玩具床铃声控安抚音乐铃新生儿床铃婴幼儿床挂0-2 岁婴儿床铃</a></span><p><strong><em class="fl">¥380.00</em>
+
+
+</strong><a href="http://mvm1401088493633.demo.yershop.com/product-60-1.html" title="康贝玩具床铃声控安抚音乐铃新生儿床铃婴幼儿床挂0-2 岁婴儿床铃" target="_blank"><img src="__IMG__/1402384011.jpg" alt="康贝玩具床铃声控安抚音乐铃新生儿床铃婴幼儿床挂0-2 岁婴儿床铃" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>6</em><a href="http://mvm1401088493633.demo.yershop.com/product-96-1.html" title="多美滋精确优蕴0段妈妈奶粉900g*2罐套装 孕妇奶粉" target="_blank">多美滋精确优蕴0段妈妈奶粉900g*2罐套装 孕妇奶粉</a></span><p style="display: none;"><strong><em class="fl">¥386.00</em>
+
+
+</strong><a href="http://mvm1401088493633.demo.yershop.com/product-96-1.html" title="多美滋精确优蕴0段妈妈奶粉900g*2罐套装 孕妇奶粉" target="_blank"><img src="__IMG__/1402383916.jpg" alt="多美滋精确优蕴0段妈妈奶粉900g*2罐套装 孕妇奶粉" class="border_img" style="width:162px;height:162px;"></a></p></li>
+			</ul>
+        </div>
+        <div class="floor_right">
+			<ul class="floor_banner">
+				<li>
+				<a href="http://mvm1401088493633.demo.yershop.com/" title="母婴" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383827.jpg" rel="lazy" path="upload/ad_pic/1402383827.jpg" alt="母婴" style="height:355px;" l="280" t="2310" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401866228296.demo.yershop.com/" title="母婴" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383841.jpg" rel="lazy" path="upload/ad_pic/1402383841.jpg" alt="母婴" style="height:355px;" l="519" t="2310" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401929304417.demo.yershop.com/" title="母婴" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383710.jpg" rel="lazy" path="upload/ad_pic/1402383710.jpg" alt="母婴" style="height:355px;" l="758" t="2310" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1402026975531.demo.yershop.com/" title="母婴" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402383972.jpg" rel="lazy" path="upload/ad_pic/1402383972.jpg" alt="母婴" style="height:355px;" l="997" t="2310" open="open"></a>
+			</li>
+			</ul>
+            <ul class="h_oflow border floor_brand">
+
+<!-- -->        		<li><a href="http://mvm1401088493633.demo.yershop.com/index.html" title="爱得利母婴" target="_blank"><img src="__IMG__/1402369661.jpg" rel="lazy" path="upload/ad_pic/1402369661.jpg" style="height:41px;" alt="爱得利母婴" class="border_img" l="287" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1401088493633.demo.yershop.com/index.html" title="爱得利母婴" target="_blank"><img src="__IMG__/1402380712.jpg" rel="lazy" path="upload/ad_pic/1402380712.jpg" style="height:41px;" alt="爱得利母婴" class="border_img" l="381" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1401929304417.demo.yershop.com/index.html" title="贝亲用品" target="_blank"><img src="__IMG__/1402276902.jpg" rel="lazy" path="upload/ad_pic/1402276902.jpg" style="height:41px;" alt="贝亲用品" class="border_img" l="475" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1401088493633.demo.yershop.com/index.html" title="爱得利母婴" target="_blank"><img src="__IMG__/1402276629.jpg" rel="lazy" path="upload/ad_pic/1402276629.jpg" style="height:41px;" alt="爱得利母婴" class="border_img" l="569" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1402026975531.demo.yershop.com/index.html" title="哈罗闪" target="_blank"><img src="__IMG__/1402276254.jpg" rel="lazy" path="upload/ad_pic/1402276254.jpg" style="height:41px;" alt="哈罗闪" class="border_img" l="663" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1401866228296.demo.yershop.com/index.html" title="皇家宝贝" target="_blank"><img src="__IMG__/1402276291.jpg" rel="lazy" path="upload/ad_pic/1402276291.jpg" style="height:41px;" alt="皇家宝贝" class="border_img" l="757" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1401929304417.demo.yershop.com/index.html" title="贝亲用品" target="_blank"><img src="__IMG__/1402275847.jpg" rel="lazy" path="upload/ad_pic/1402275847.jpg" style="height:41px;" alt="贝亲用品" class="border_img" l="851" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1401866228296.demo.yershop.com/index.html" title="皇家宝贝" target="_blank"><img src="__IMG__/1402381144.jpg" rel="lazy" path="upload/ad_pic/1402381144.jpg" style="height:41px;" alt="皇家宝贝" class="border_img" l="945" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1401929304417.demo.yershop.com/index.html" title="贝亲用品" target="_blank"><img src="__IMG__/1402381008.jpg" rel="lazy" path="upload/ad_pic/1402381008.jpg" style="height:41px;" alt="贝亲用品" class="border_img" l="1039" t="2673" open="open"></a></li>
+        		<li><a href="http://mvm1402026975531.demo.yershop.com/index.html" title="哈罗闪" target="_blank"><img src="__IMG__/1402381105.jpg" rel="lazy" path="upload/ad_pic/1402381105.jpg" style="height:41px;" alt="哈罗闪" class="border_img" l="1133" t="2673" open="open"></a></li>
+			</ul>
+        </div>	
+	</div><!--- 第1到第6楼 --->
+
+	<div class="clear"></div>
+    <div class="floor clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1331512867446.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=296" target="_blank" title="手机">手机</a>
+				<a href="http://www.demo.yershop.com/category.php?action=293" target="_blank" title="笔记本">笔记本</a>
+				<a href="http://demo.yershop.com/sub.php?action=5" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+		<div class="floor_left">    
+            <ul class="five_box five_box5"><!-- 五箱 开始 -->
+				<li><span class="FB_hover"><em>1</em><a href="http://mvm1401160537860.demo.yershop.com/product-125-1.html" title="Samsung/三星270E5V-K01 K04 270E5U-K01 15寸笔记本电脑" target="_blank">Samsung/三星270E5V-K01 K04 270E5U-K01 15寸笔记本电脑</a></span><p style="display: block;"><strong><em class="fl">¥2,399.00</em>
+
+
+</strong><a href="http://mvm1401160537860.demo.yershop.com/product-125-1.html" title="Samsung/三星270E5V-K01 K04 270E5U-K01 15寸笔记本电脑" target="_blank"><img src="__IMG__/1402384241.jpg" alt="Samsung/三星270E5V-K01 K04 270E5U-K01 15寸笔记本电脑" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>2</em><a href="http://mvm1401160537860.demo.yershop.com/product-114-1.html" title="Apple/苹果 iPad Air   ipad5平板电脑 ipadair5代" target="_blank">Apple/苹果 iPad Air   ipad5平板电脑 ipadair5代</a></span><p><strong><em class="fl">¥3,198.00</em>
+
+
+</strong><a href="http://mvm1401160537860.demo.yershop.com/product-114-1.html" title="Apple/苹果 iPad Air   ipad5平板电脑 ipadair5代" target="_blank"><img src="__IMG__/1402384387.jpg" alt="Apple/苹果 iPad Air   ipad5平板电脑 ipadair5代" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>3</em><a href="http://mvm1401160537860.demo.yershop.com/product-99-1.html" title="Nikon/尼康 1 S1套机(11-27.5mm) 可换镜数码相机" target="_blank">Nikon/尼康 1 S1套机(11-27.5mm) 可换镜数码相机</a></span><p style="display: none;"><strong><em class="fl">¥2,879.00</em>
+
+
+</strong><a href="http://mvm1401160537860.demo.yershop.com/product-99-1.html" title="Nikon/尼康 1 S1套机(11-27.5mm) 可换镜数码相机" target="_blank"><img src="__IMG__/1402383705.jpg" alt="Nikon/尼康 1 S1套机(11-27.5mm) 可换镜数码相机" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>4</em><a href="http://mvm1401160537860.demo.yershop.com/product-128-1.html" title="海尔ZW1401B正品 家用强力吸尘器 小型迷你超静音无耗材" target="_blank">海尔ZW1401B正品 家用强力吸尘器 小型迷你超静音无耗材</a></span><p><strong><em class="fl">¥398.00</em>
+
+
+</strong><a href="http://mvm1401160537860.demo.yershop.com/product-128-1.html" title="海尔ZW1401B正品 家用强力吸尘器 小型迷你超静音无耗材" target="_blank"><img src="__IMG__/1402384349.jpg" alt="海尔ZW1401B正品 家用强力吸尘器 小型迷你超静音无耗材" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>5</em><a href="http://mvm1401160537860.demo.yershop.com/product-326-1.html" title="Supor/苏泊尔 CYSB50FC8-100/50FC6/60FC8电压力锅双胆正品" target="_blank">Supor/苏泊尔 CYSB50FC8-100/50FC6/60FC8电压力锅双胆正品</a></span><p style="display: none;"><strong><em class="fl">¥429.00</em>
+
+
+</strong><a href="http://mvm1401160537860.demo.yershop.com/product-326-1.html" title="Supor/苏泊尔 CYSB50FC8-100/50FC6/60FC8电压力锅双胆正品" target="_blank"><img src="__IMG__/1402384348.jpg" alt="Supor/苏泊尔 CYSB50FC8-100/50FC6/60FC8电压力锅双胆正品" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>6</em><a href="http://mvm1401160537860.demo.yershop.com/product-327-1.html" title="Saeco/喜客 ODEA GIRO/GO 煮咖啡机家用全自动 意式/磨豆/商用" target="_blank">Saeco/喜客 ODEA GIRO/GO 煮咖啡机家用全自动 意式/磨豆/商用</a></span><p style="display: none;"><strong><em class="fl">¥2,580.00</em>
+
+
+</strong><a href="http://mvm1401160537860.demo.yershop.com/product-327-1.html" title="Saeco/喜客 ODEA GIRO/GO 煮咖啡机家用全自动 意式/磨豆/商用" target="_blank"><img src="__IMG__/1402384353.jpg" alt="Saeco/喜客 ODEA GIRO/GO 煮咖啡机家用全自动 意式/磨豆/商用" class="border_img" style="width:162px;height:162px;"></a></p></li>
+			</ul>
+        </div>
+        <div class="floor_right">
+			<ul class="floor_banner">
+				<li>
+				<a href="http://mvm1401160537860.demo.yershop.com/" title="数码家电" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384016.jpg" rel="lazy" path="upload/ad_pic/1402384016.jpg" alt="数码家电" style="height:355px;" l="280" t="2796" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401160537860.demo.yershop.com/" title="数码家电" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384654.jpg" rel="lazy" path="upload/ad_pic/1402384654.jpg" alt="数码家电" style="height:355px;" l="519" t="2796" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401160537860.demo.yershop.com/" title="数码家电" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384420.jpg" rel="lazy" path="upload/ad_pic/1402384420.jpg" alt="数码家电" style="height:355px;" l="758" t="2796" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401160537860.demo.yershop.com/" title="数码家电" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384351.jpg" rel="lazy" path="upload/ad_pic/1402384351.jpg" alt="数码家电" style="height:355px;" l="997" t="2796" open="open"></a>
+			</li>
+			</ul>
+            <ul class="h_oflow border floor_brand">
+
+<!-- -->        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402279881.jpg" rel="lazy" path="upload/ad_pic/1402279881.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="287" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402280262.jpg" rel="lazy" path="upload/ad_pic/1402280262.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="381" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402279602.jpg" rel="lazy" path="upload/ad_pic/1402279602.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="475" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402280074.jpg" rel="lazy" path="upload/ad_pic/1402280074.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="569" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402280071.jpg" rel="lazy" path="upload/ad_pic/1402280071.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="663" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402279873.jpg" rel="lazy" path="upload/ad_pic/1402279873.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="757" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402280033.jpg" rel="lazy" path="upload/ad_pic/1402280033.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="851" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402279829.jpg" rel="lazy" path="upload/ad_pic/1402279829.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="945" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402280056.jpg" rel="lazy" path="upload/ad_pic/1402280056.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="1039" t="3159" open="open"></a></li>
+        		<li><a href="http://mvm1401160537860.demo.yershop.com/index.html" title="尼康数码" target="_blank"><img src="__IMG__/1402381376.jpg" rel="lazy" path="upload/ad_pic/1402381376.jpg" style="height:41px;" alt="尼康数码" class="border_img" l="1133" t="3159" open="open"></a></li>
+			</ul>
+        </div>	
+	</div><!--- 第1到第6楼 --->
+
+	<div class="clear"></div>
+    <div class="floor clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1331512832527.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=62" target="_blank" title="家居饰品">家居饰品</a>
+				<a href="http://www.demo.yershop.com/category.php?action=47" target="_blank" title="家纺">家纺</a>
+				<a href="http://demo.yershop.com/sub.php?action=6" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+		<div class="floor_left">    
+            <ul class="five_box five_box6"><!-- 五箱 开始 -->
+				<li><span class="FB_hover"><em>1</em><a href="http://mvm1401323129672.demo.yershop.com/product-212-1.html" title="欧睿橱柜 定制厨房柜简易厨柜现代风格爱格板" target="_blank">欧睿橱柜 定制厨房柜简易厨柜现代风格爱格板</a></span><p style="display: block;"><strong><em class="fl">¥4,440.00</em>
+
+
+</strong><a href="http://mvm1401323129672.demo.yershop.com/product-212-1.html" title="欧睿橱柜 定制厨房柜简易厨柜现代风格爱格板" target="_blank"><img src="__IMG__/1402384369.jpg" alt="欧睿橱柜 定制厨房柜简易厨柜现代风格爱格板" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>2</em><a href="http://mvm1401950065796.demo.yershop.com/product-281-1.html" title="小沙漏创意生日礼物送女生可爱个性铁艺工艺品装饰品摆件家居摆设" target="_blank">小沙漏创意生日礼物送女生可爱个性铁艺工艺品装饰品摆件家居摆设</a></span><p><strong><em class="fl">¥66.00</em>
+
+
+</strong><a href="http://mvm1401950065796.demo.yershop.com/product-281-1.html" title="小沙漏创意生日礼物送女生可爱个性铁艺工艺品装饰品摆件家居摆设" target="_blank"><img src="__IMG__/1402384021.jpg" alt="小沙漏创意生日礼物送女生可爱个性铁艺工艺品装饰品摆件家居摆设" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>3</em><a href="http://mvm1401323129672.demo.yershop.com/product-215-1.html" title="布艺沙发现代简约组合小户型 客厅转角沙发" target="_blank">布艺沙发现代简约组合小户型 客厅转角沙发</a></span><p><strong><em class="fl">¥4,260.00</em>
+
+
+</strong><a href="http://mvm1401323129672.demo.yershop.com/product-215-1.html" title="布艺沙发现代简约组合小户型 客厅转角沙发" target="_blank"><img src="__IMG__/1402384297.jpg" alt="布艺沙发现代简约组合小户型 客厅转角沙发" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>4</em><a href="http://mvm1401323129672.demo.yershop.com/product-198-1.html" title="陶瓷情侣天鹅摆件 新婚装饰品 家居家饰 现代工艺品" target="_blank">陶瓷情侣天鹅摆件 新婚装饰品 家居家饰 现代工艺品</a></span><p><strong><em class="fl">¥228.00</em>
+
+
+</strong><a href="http://mvm1401323129672.demo.yershop.com/product-198-1.html" title="陶瓷情侣天鹅摆件 新婚装饰品 家居家饰 现代工艺品" target="_blank"><img src="__IMG__/1402383609.jpg" alt="陶瓷情侣天鹅摆件 新婚装饰品 家居家饰 现代工艺品" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>5</em><a href="http://mvm1401323129672.demo.yershop.com/product-194-1.html" title="春秋羊绒被冬被加厚棉被被子单双人被" target="_blank">春秋羊绒被冬被加厚棉被被子单双人被</a></span><p><strong><em class="fl">¥339.00</em>
+
+
+</strong><a href="http://mvm1401323129672.demo.yershop.com/product-194-1.html" title="春秋羊绒被冬被加厚棉被被子单双人被" target="_blank"><img src="__IMG__/1402384070.jpg" alt="春秋羊绒被冬被加厚棉被被子单双人被" class="border_img" style="width:162px;height:162px;"></a></p></li>
+				<li><span class=""><em>6</em><a href="http://mvm1401323129672.demo.yershop.com/product-210-1.html" title="景德镇陶瓷餐具 56头骨瓷餐具套装 碗盘子碟勺子套装" target="_blank">景德镇陶瓷餐具 56头骨瓷餐具套装 碗盘子碟勺子套装</a></span><p><strong><em class="fl">¥439.00</em>
+
+
+</strong><a href="http://mvm1401323129672.demo.yershop.com/product-210-1.html" title="景德镇陶瓷餐具 56头骨瓷餐具套装 碗盘子碟勺子套装" target="_blank"><img src="__IMG__/1402383802.jpg" alt="景德镇陶瓷餐具 56头骨瓷餐具套装 碗盘子碟勺子套装" class="border_img" style="width:162px;height:162px;"></a></p></li>
+			</ul>
+        </div>
+        <div class="floor_right">
+			<ul class="floor_banner">
+				<li>
+				<a href="http://mvm1401323129672.demo.yershop.com/" title="家居" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384998.jpg" rel="lazy" path="upload/ad_pic/1402384998.jpg" alt="家居" style="height:355px;" l="280" t="3282" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401789347366.demo.yershop.com/" title="家居装修" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384749.jpg" rel="lazy" path="upload/ad_pic/1402384749.jpg" alt="家居装修" style="height:355px;" l="519" t="3282" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1401323129672.demo.yershop.com/" title="家居装修" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384925.jpg" rel="lazy" path="upload/ad_pic/1402384925.jpg" alt="家居装修" style="height:355px;" l="758" t="3282" open="open"></a>
+			</li>
+				<li>
+				<a href="http://mvm1402016952293.demo.yershop.com/" title="家居装修" target="_blank" rel="banner" class="fl"><img src="__IMG__/1402384853.jpg" rel="lazy" path="upload/ad_pic/1402384853.jpg" alt="家居装修" style="height:355px;" l="997" t="3282" open="open"></a>
+			</li>
+			</ul>
+            <ul class="h_oflow border floor_brand">
+
+<!-- -->        		<li><a href="http://mvm1401323129672.demo.yershop.com/index.html" title="宜家家居" target="_blank"><img src="__IMG__/1402380952.jpg" rel="lazy" path="upload/ad_pic/1402380952.jpg" style="height:41px;" alt="宜家家居" class="border_img" l="287" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1402016952293.demo.yershop.com/index.html" title="玩艺铺" target="_blank"><img src="__IMG__/1402281700.jpg" rel="lazy" path="upload/ad_pic/1402281700.jpg" style="height:41px;" alt="玩艺铺" class="border_img" l="381" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1401323129672.demo.yershop.com/index.html" title="宜家家居" target="_blank"><img src="__IMG__/1402281906.jpg" rel="lazy" path="upload/ad_pic/1402281906.jpg" style="height:41px;" alt="宜家家居" class="border_img" l="475" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1401789347366.demo.yershop.com/index.html" title="华美佳装饰" target="_blank"><img src="__IMG__/1402281060.jpg" rel="lazy" path="upload/ad_pic/1402281060.jpg" style="height:41px;" alt="华美佳装饰" class="border_img" l="569" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1401789347366.demo.yershop.com/index.html" title="华美佳装饰" target="_blank"><img src="__IMG__/1402281004.jpg" rel="lazy" path="upload/ad_pic/1402281004.jpg" style="height:41px;" alt="华美佳装饰" class="border_img" l="663" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1401323129672.demo.yershop.com/index.html" title="宜家家居" target="_blank"><img src="__IMG__/1402281088.jpg" rel="lazy" path="upload/ad_pic/1402281088.jpg" style="height:41px;" alt="宜家家居" class="border_img" l="757" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1402016952293.demo.yershop.com/index.html" title="玩艺铺" target="_blank"><img src="__IMG__/1402281629.jpg" rel="lazy" path="upload/ad_pic/1402281629.jpg" style="height:41px;" alt="玩艺铺" class="border_img" l="851" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1401323129672.demo.yershop.com/index.html" title="宜家家居" target="_blank"><img src="__IMG__/1402281374.jpg" rel="lazy" path="upload/ad_pic/1402281374.jpg" style="height:41px;" alt="宜家家居" class="border_img" l="945" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1401789347366.demo.yershop.com/index.html" title="华美佳装饰" target="_blank"><img src="__IMG__/1402381444.jpg" rel="lazy" path="upload/ad_pic/1402381444.jpg" style="height:41px;" alt="华美佳装饰" class="border_img" l="1039" t="3645" open="open"></a></li>
+        		<li><a href="http://mvm1402016952293.demo.yershop.com/index.html" title="玩艺铺" target="_blank"><img src="__IMG__/1402280987.jpg" rel="lazy" path="upload/ad_pic/1402280987.jpg" style="height:41px;" alt="玩艺铺" class="border_img" l="1133" t="3645" open="open"></a></li>
+			</ul>
+        </div>	
+	</div><!--- 第1到第6楼 --->
+
+    <div class="clear0"></div>
+    <div class="floor floor_small fl clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1386644139367.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=93" target="_blank" title="茗品冲调">茗品冲调</a>
+				<a href="http://www.demo.yershop.com/category.php?action=91" target="_blank" title="特产美食">特产美食</a>
+				<a href="http://demo.yershop.com/sub.php?action=7" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+        <ul class="fl floor_shop1">
+			<li>
+             <a href="http://mvm1401865306644.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402385135.jpg" alt="热带风情泰国菜双人餐节假日通用"></a>
+                <a href="http://mvm1401865306644.demo.yershop.com/" target="_blank" rel="banner" class="name">热带风情泰国菜双人餐节假日通用</a>
+            </li>
+			<li>
+             <a href="http://mvm1401865306644.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402385379.jpg" alt="看舌尖2吃巴西烤肉无需提前预约"></a>
+                <a href="http://mvm1401865306644.demo.yershop.com/" target="_blank" rel="banner" class="name">看舌尖2吃巴西烤肉无需提前预约</a>
+            </li>
+			<li>
+             <a href="http://mvm1401344371544.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402385666.jpg" alt="云雪山滑雪场单人票全年通用"></a>
+                <a href="http://mvm1401344371544.demo.yershop.com/" target="_blank" rel="banner" class="name">云雪山滑雪场单人票全年通用</a>
+            </li>
+			<li>
+             <a href="http://mvm1401865306644.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402385418.jpg" alt="火锅涮起来越吃越红火"></a>
+                <a href="http://mvm1401865306644.demo.yershop.com/" target="_blank" rel="banner" class="name">火锅涮起来越吃越红火</a>
+            </li>
+			<li>
+             <a href="http://mvm1401150180681.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402389643.jpg" alt="日本料理暑期特惠98元/位不分时段"></a>
+                <a href="http://mvm1401150180681.demo.yershop.com/" target="_blank" rel="banner" class="name">日本料理暑期特惠98元/位不分时段</a>
+            </li>
+			<li>
+             <a href="http://mvm1401150180681.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402389099.jpg" alt="必胜客鳕鱼披萨仅售49元"></a>
+                <a href="http://mvm1401150180681.demo.yershop.com/" target="_blank" rel="banner" class="name">必胜客鳕鱼披萨仅售49元</a>
+            </li>
+		</ul>  	
+	</div><!--- 第7楼 --->
+    <div class="floor floor_small fr clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1386644394398.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=130" target="_blank" title="酒店预订">酒店预订</a>
+				<a href="http://www.demo.yershop.com/category.php?action=135" target="_blank" title="景点门票">景点门票</a>
+				<a href="http://demo.yershop.com/sub.php?action=8" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+        <ul class="fl floor_shop1">
+			<li>
+             <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402389479.jpg" alt="畅游厦门住白鹭宾馆2天1晚"></a>
+                <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" class="name">畅游厦门住白鹭宾馆2天1晚</a>
+            </li>
+			<li>
+             <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402389668.jpg" alt="3天2晚东山岛自由行"></a>
+                <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" class="name">3天2晚东山岛自由行</a>
+            </li>
+			<li>
+             <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402388453.jpg" alt="龙佳休闲山庄温泉门票168"></a>
+                <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" class="name">龙佳休闲山庄温泉门票168</a>
+            </li>
+			<li>
+             <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402388015.jpg" alt="世界文化遗产田螺坑土楼两日游268"></a>
+                <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" class="name">世界文化遗产田螺坑土楼两日游268</a>
+            </li>
+			<li>
+             <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402388395.jpg" alt="三亚三天两晚双飞双人游仅5980元"></a>
+                <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" class="name">三亚三天两晚双飞双人游仅5980元</a>
+            </li>
+			<li>
+             <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" rel="banner"><img src="__IMG__/1402388305.jpg" alt="泰国热带风情游（泰冏拍摄地）"></a>
+                <a href="http://mvm1401324032562.demo.yershop.com/" target="_blank" class="name">泰国热带风情游（泰冏拍摄地）</a>
+            </li>
+		</ul>
+	</div><!--- 第8楼 --->
+    <div class="clear0"></div>
+    <div class="floor floor_small fl clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1386644421278.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=165" target="_blank" title="车载电器">车载电器</a>
+				<a href="http://demo.yershop.com/sub.php?action=9" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+        <dl class="floor_shop3">
+	
+			<dt><a href="http://mvm1401767026571.demo.yershop.com/" title="越野越自己" target="_blank"><img src="__IMG__/1402390375.jpg" alt="越野越自己" width="320" height="230"></a></dt>
+			<dd>
+            	<ul>    
+					<li><a href="http://mvm1401767026571.demo.yershop.com/" title="超级大黄蜂新科迈罗" target="_blank"><img src="__IMG__/1402391242.jpg" alt="超级大黄蜂新科迈罗"></a><a href="http://mvm1401767026571.demo.yershop.com/" title="超级大黄蜂新科迈罗" target="_blank" class="name">超级大黄蜂新科迈罗</a></li>
+					<li><a href="http://mvm1401767026571.demo.yershop.com/" title="暴力粗线条悍马H3T" target="_blank"><img src="__IMG__/1402390783.jpg" alt="暴力粗线条悍马H3T"></a><a href="http://mvm1401767026571.demo.yershop.com/" title="暴力粗线条悍马H3T" target="_blank" class="name">暴力粗线条悍马H3T</a></li>
+					<li><a href="http://mvm1401767026571.demo.yershop.com/" title="实拍最便宜的BRZ" target="_blank"><img src="__IMG__/1402390754.jpg" alt="实拍最便宜的BRZ"></a><a href="http://mvm1401767026571.demo.yershop.com/" title="实拍最便宜的BRZ" target="_blank" class="name">实拍最便宜的BRZ</a></li>
+					<li><a href="http://mvm1401767026571.demo.yershop.com/" title="精壮美国佬Terrain" target="_blank"><img src="__IMG__/1402390624.jpg" alt="精壮美国佬Terrain"></a><a href="http://mvm1401767026571.demo.yershop.com/" title="精壮美国佬Terrain" target="_blank" class="name">精壮美国佬Terrain</a></li>
+            	</ul>
+            </dd>
+		</dl>    
+	</div><!--- 第9楼 --->
+    <div class="floor floor_small fr clearfix h_oflow">	
+		<h3 class="floor_title">
+			<img src="__IMG__/1386644427909.jpg" width="200" height="50">
+			<p> 
+				<a href="http://www.demo.yershop.com/category.php?action=203" target="_blank" title="教育培训">教育培训</a>
+				<a href="http://demo.yershop.com/sub.php?action=10" target="_blank" class="more">去逛街&gt;&gt;</a>
+			</p>
+		</h3>
+        <dl class="floor_shop4">
+	
+			<dt><a href="http://mvm1401324032562.demo.yershop.com/" title="香港游" target="_blank"><img src="__IMG__/1402391139.jpg" alt="香港游" width="180" height="230"></a></dt>
+			<dd>
+            	<ul>    
+					<li><a href="http://mvm1401328772550.demo.yershop.com/" title="央视最爱重播的老影片" target="_blank"><img src="__IMG__/1402391310.jpg" alt="央视最爱重播的老影片"></a><p class="fct"><a href="http://mvm1401328772550.demo.yershop.com/" title="央视最爱重播的老影片" target="_blank">央视最爱重播的老影片</a></p></li>
+					<li><a href="http://mvm1401328772550.demo.yershop.com/" title="谋女郎新片同桌的你" target="_blank"><img src="__IMG__/1402391678.jpg" alt="谋女郎新片同桌的你"></a><p class="fct"><a href="http://mvm1401328772550.demo.yershop.com/" title="谋女郎新片同桌的你" target="_blank">谋女郎新片同桌的你</a></p></li>
+					<li><a href="http://mvm1401328772550.demo.yershop.com/" title="2014好莱坞大片来袭" target="_blank"><img src="__IMG__/1402391253.jpg" alt="2014好莱坞大片来袭"></a><p class="fct"><a href="http://mvm1401328772550.demo.yershop.com/" title="2014好莱坞大片来袭" target="_blank">2014好莱坞大片来袭</a></p></li>
+					<li><a href="http://mvm1401328772550.demo.yershop.com/" title="怀旧青春暑期档电影" target="_blank"><img src="__IMG__/1402390835.jpg" alt="怀旧青春暑期档电影"></a><p class="fct"><a href="http://mvm1401328772550.demo.yershop.com/" title="怀旧青春暑期档电影" target="_blank">怀旧青春暑期档电影</a></p></li>
+            	</ul>
+            </dd>
+		</dl>
+	</div><!--- 第10楼 --->
+
+
+ 
+<script type="text/javascript">
+
+function AddProductToCart(i)
+{ var a='{$url}';
+	var goodid=i;
+var url='{:U("Shopcart/addItem")}';//地址
+$.ajax({
+type:'post', //传送的方式,get/post
+url:'{:U("Shopcart/addgood")}', //发送数据的地址
+ data:{
+	 id:goodid,tag:1
+ },
+ dataType: "json",
+success:function(data)
+{
+
+var html='<li><img src="'+data.src+'">'+data.title+'<span class="red" style="text-align:left"> '
++data.price+'元</span>'+'<a name="'+goodid+'" rel="del" class="red" onclick="delcommon(event)">删除</a>'+'</li>';//创建节点
+if(data.exsit=="1"){
+	alert("购物车已存在该商品，数量+1");
+//后台返回数据，判断购物车中是否已存在，存在，不追加节点
+
+}	
+else{
+alert(data.msg);//后台返回数据，判断购物车中是否已存在，不存在，追加节点
+	$("p.sc_goods_none").remove();//移除节点
+$("ul.sc_goods_ul").append(html);//追加节点
+
+}
+if(data.num=="0"){ //判断数量是否为0，为0则隐藏底部查看工具
+						$("div.sc_goods_foot").hide();
+	}
+	else{$("div.sc_goods_foot").show();}
+},
+error:function (XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})
+}
+
+	function delcommon(event) { //获取事件源
+event = event ? event : window.event; 
+var obj = event.srcElement ? event.srcElement : event.target; 
+//这时obj就是触发事件的对象，可以使用它的各个属性 
+//还可以将obj转换成jquery对象，方便选用其他元素 
+str = obj.innerHTML.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+
+	var $obj = $(obj);
+	
+	if(obj.rel=="del")
+{ var gid=obj.name;
+var array=$("#div2 li");//登录用户显示的li的个数
+var arr=$("#goods li");//未登录用户显示的li的个数
+	//全选的实现 定义删的发送路径
+	if(array.length!==4){
+		var del='{:U("Shopcart/delItem")}';
+	
+	}
+else{
+var del='{:U("Shopcart/delItemByuid")}';
+	
+	}
+$.ajax({
+type:'post', //传送的方式,get/post
+url:del, //发送数据的地址
+data:{id:gid},
+ dataType: "json",
+success:function(data)
+{var $obj = $(obj);
+	$obj.parent().remove();
+
+	if(data.num=="0"){  //判断购物车数量是否为0，为0则隐藏底部查看工具
+						$("div.sc_goods_foot").hide();
+						var html='<p class="sc_goods_none" >您的购物车还是空的，赶紧行动吧！</p>';
+					$("ul.sc_goods_ul").html(html);
+				
+	
+	}
+	else{$("div.sc_goods_foot").show();}
+
+},
+error:function (event, XMLHttpRequest, ajaxOptions, thrownError) {
+alert(XMLHttpRequest+thrownError); }
+		})
+}
+	
+	} 
+  var oDiv1 = document.getElementById('div1');
+            var oDiv2 = document.getElementById('div2');
+            var timer = null;//定义定时器变量
+            //鼠标移入div1或div2都把定时器关闭了，不让他消失
+            oDiv1.onmouseover = oDiv2.onmouseover = function ()
+            {
+                oDiv2.style.display = 'block';
+                clearTimeout(timer);
+            }
+            //鼠标移出div1或div2都重新开定时器，让他延时消失
+            oDiv1.onmouseout = oDiv2.onmouseout = function ()
+            {
+                //开定时器
+                timer = setTimeout(function () { 
+                    oDiv2.style.display = 'none'; }, 200);
+            }
+			
+			var a= document.getElementById('shopping_cart');
+  var b = document.getElementById('goods');
+            var timer5 = null;//定义定时器变量
+            //鼠标移入div1或div2都把定时器关闭了，不让他消失
+            a.onmouseover = b.onmouseover = function ()
+            {
+                b.style.display = 'block';
+                clearTimeout(timer5);
+            }
+            //鼠标移出div1或div2都重新开定时器，让他延时消失
+            a.onmouseout = b.onmouseout = function ()
+            {
+                //开定时器
+                timer5= setTimeout(function () { 
+                    b.style.display = 'none'; }, 500);
+            }
+			</script>
+
+
+            
+</block> 
